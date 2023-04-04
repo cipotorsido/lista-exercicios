@@ -1,7 +1,7 @@
 pessoas = []
 while True:
     pessoa = {}
-    pessoa['nome'] = str(input("Qual o seu nome? SEM ACENTOS"))
+    pessoa['nome'] = str(input("Qual o seu nome? SEM ACENTOS:  "))
     if not pessoa['nome'].isalpha():
         print("Seu nome não condiz com o cartório")
         continue

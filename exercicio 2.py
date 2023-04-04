@@ -2,6 +2,7 @@ informacoes = []
 contagem_elevadores = {"A": 0, "B": 0, "C": 0}
 contagem_periodos = {"M": 0, "V": 0, "N": 0}
 contagem_total = 0
+contagem_total = 0
 while True:
     elevador_frequente = input("Qual elevador você  com mais frequência? (A, B ou C)? ").upper()
     periodo_utilizacao = input("Qual o período em que você utiliza o elevador (M = Matutino, V = Vespertino, N = Noturno)? ").upper()
