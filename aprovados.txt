@@ -1,2 +1,3 @@
 Alunos aprovados:
 eduardo: 8.00
+gabriel: 9.00
