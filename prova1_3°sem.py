@@ -194,7 +194,7 @@ import os
 despesas = []
 
 # Defina o diretório onde estão os arquivos txt
-diretorio = 'caminho/para/a/pasta'
+diretorio = 'despesas.txt'
 
 import os
 
