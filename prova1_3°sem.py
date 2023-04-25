@@ -17,13 +17,13 @@ def alterar_rendimento(rendimentos):
         investimento = rendimento_atual * 0.01
         rendimento_novo = rendimento_atual - economia - investimento
 
-        # Remove o rendimento do último mês registrado
+
         rendimentos.pop()
 
-        # Adiciona o novo rendimento à lista de rendimentos
+
         rendimentos.append(rendimento_novo)
 
-        # Reordena a lista de rendimentos
+
         rendimentos.sort()
 
         with open("rendimento_mensal.txt", "w") as arquivo:
@@ -145,24 +145,24 @@ def excluir_despesa():
 salvar_despesas(despesas)
 excluir_despesa()
 
-# define o caminho do arquivo de despesas
+
 filepath = "despesas.txt"
 
-# verifica se o arquivo de despesas existe
+
 if not os.path.exists(filepath):
     print("O arquivo de despesas não existe!")
 else:
-    # carrega as despesas do arquivo
+
     with open(filepath, "r") as f:
         lista_despesa = f.readlines()
 
-    # remove os caracteres de nova linha
+
     lista_despesa = [d.strip() for d in lista_despesa]
 
-    # cria um dicionário vazio para armazenar as despesas
+
     despesas = {}
 
-    # itera sobre a lista de despesas e adiciona ao dicionário
+
     for despesa in lista_despesa:
         try:
             nome, valor = despesa.split(":")
@@ -170,11 +170,11 @@ else:
         except ValueError:
             print(f"Erro ao processar despesa: {despesa}")
 
-    # exibe o total das despesas
+
     total = sum(despesas.values())
     print(f"Total das despesas: R$ {total:.2f}")
 
-    # altera o valor de uma despesa
+
     nome_despesa = input("Digite o nome da despesa que deseja alterar: ")
     novo_valor = input("Digite o novo valor da despesa: ")
 
@@ -190,21 +190,21 @@ else:
 
 import os
 
-# Crie uma lista vazia para armazenar as despesas
+
 despesas = []
 
-# Defina o diretório onde estão os arquivos txt
+
 diretorio = 'despesas.txt'
 
 import os
 
-# Defina o nome da pasta onde estão os arquivos de despesa
+
 diretorio = 'despesas'
 
-# Inicialize a lista de despesas
+
 despesas = []
 
-# Percorra cada arquivo na pasta
+
 for arquivo in os.listdir(excluir_despesa()):
     if arquivo.endswith('despesas.txt'):
         # Abra o arquivo em modo de leitura
@@ -218,43 +218,43 @@ for arquivo in os.listdir(excluir_despesa()):
                     'mes': mes,
                     'valor': float(valor)
                 })
-# Ordene a lista de despesas por ano e mês
+
 despesas_ordenadas = sorted(despesas, key=lambda x: (int(x['mes'].split('/')[1]), int(x['mes'].split('/')[0])))
 
-# Imprima as despesas ordenadas
+
 for despesa in despesas_ordenadas:
     print(despesa)
 
     import re
 
-    # diretório contendo os arquivos .txt
+
     dir_path = "/caminho/para/diretorio"
 
-    # dicionário que irá armazenar as informações agrupadas por mês
+
     info_by_month = {}
 
-    # percorre todos os arquivos no diretório
+
     for filename in os.listdir(dir_path):
         if filename.endswith(".txt"):
             filepath = os.path.join(dir_path, filename)
 
-            # extrai o mês presente no nome do arquivo
+
             month = re.findall(r"\d{4}-(\d{2})", filename)[0]
 
-            # abre o arquivo e lê suas informações
+
             with open(filepath, "r") as f:
                 info = f.read()
 
-            # adiciona as informações ao dicionário correspondente ao mês presente
+
             if month not in info_by_month:
                 info_by_month[month] = [info]
             else:
                 info_by_month[month].append(info)
 
-    # ordena as chaves do dicionário por ordem crescente de meses
+
     info_by_month = dict(sorted(info_by_month.items()))
 
-    # imprime as informações agrupadas por mês
+
     for month, info_list in info_by_month.items():
         print(f"Mês {month}:")
         for info in info_list:
