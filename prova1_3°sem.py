@@ -1,50 +1,55 @@
 import os.path
+from typing import List, Dict
 
 
-def calcular_total(rendimentos):
+def ler_rendimentos_mensais() -> List[float]:
+    """Lê os rendimentos mensais armazenados no arquivo 'rendimento_mensal.txt' e retorna uma lista de floats"""
+    rendimentos = []
+    if os.path.exists("rendimento_mensal.txt"):
+        with open("rendimento_mensal.txt", "r") as arquivo:
+            rendimentos = [float(rendimento.strip()) for rendimento in arquivo.readlines() if rendimento.strip()]
+    return rendimentos
+
+
+def salvar_rendimentos_mensais(rendimentos: List[float]) -> None:
+    """Salva os rendimentos mensais em um arquivo 'rendimento_mensal.txt'"""
+    with open("rendimento_mensal.txt", "w") as arquivo:
+        for rendimento in rendimentos:
+            arquivo.write(f"{rendimento:.2f}\n")
+
+
+def calcular_total_rendimentos(rendimentos: List[float]) -> None:
+    """Calcula e imprime o total de rendimentos mensais"""
+    if not rendimentos:
+        print("Não há nenhum rendimento registrado.")
+        return
+
     total = sum(rendimentos)
     print(f"Total de rendimentos: R$ {total:.2f}")
 
 
-def alterar_rendimento(rendimentos):
-    try:
-        if len(rendimentos) == 0:
-            print("Não há nenhum rendimento registrado.")
-            return
+def ler_despesas() -> List[Dict[str, any]]:
+    """Lê as despesas armazenadas no arquivo 'despesas.txt' e retorna uma lista de dicionários"""
+    despesas = []
+    if os.path.exists("despesas.txt"):
+        with open("despesas.txt", "r") as arquivo:
+            proxima_linha_eh_cabecalho = True
+            for linha in arquivo:
+                if proxima_linha_eh_cabecalho:
+                    proxima_linha_eh_cabecalho = False
+                    continue
 
-        rendimento_atual = rendimentos[-1]
-        economia = rendimento_atual * 0.1
-        investimento = rendimento_atual * 0.01
-        rendimento_novo = rendimento_atual - economia - investimento
-
-
-        rendimentos.pop()
-
-
-        rendimentos.append(rendimento_novo)
-
-
-        rendimentos.sort()
-
-        with open("rendimento_mensal.txt", "w") as arquivo:
-            for rendimento in rendimentos:
-                arquivo.write(f"{rendimento}\n")
-
-        print("Rendimento alterado com sucesso!")
-
-    except Exception as e:
-        print("Ocorreu um erro ao alterar o rendimento:", e)
+                campos = linha.strip().split('\t')
+                descricao = campos[0]
+                mes = int(campos[1])
+                valor = float(campos[2])
+                despesa = {'descricao': descricao, 'mes': mes, 'valor': valor}
+                despesas.append(despesa)
+    return despesas
 
 
-def salvar_despesas(despesas):
-    try:
-        with open("despesas.txt", "w") as arquivo:
-            arquivo.write("Descrição\tMês\tValor\n")
-            for despesa in despesas:
-                arquivo.write(f"{despesa['descricao']}\t{despesa['mes']}\tR$ {despesa['valor']:.2f}\n")
-        print("Despesas salvas com sucesso!")
-    except Exception as e:
-        print("Ocorreu um erro ao salvar as despesas:", e)
+import os
+
 
 def cadastrar_despesas(despesas, mes):
     descricao = input("Descrição da despesa: ")
@@ -65,58 +70,17 @@ def calcular_despesas_por_mes(despesas):
     return despesas_por_mes
 
 
-try:
-    mes = int(input("Que mês estamos? "))
-    rendimento_do_mes = float(input("Qual o seu rendimento do mês? "))
-
-    rendimentos = []
-    if os.path.exists("rendimento_mensal.txt"):
-        with open("rendimento_mensal.txt", "r") as arquivo:
-            rendimentos = [float(rendimento) for rendimento in arquivo.readlines()]
-
-    rendimentos.append(rendimento_do_mes)
-
-    with open("rendimento_mensal.txt", "w") as arquivo:
-        for rendimento in rendimentos:
-            arquivo.write(f"{rendimento}\n")
-
-    if len(rendimentos) > 1:
-        calcular_total(rendimentos)
-    despesas = []
-    if os.path.exists("despesas.txt"):
-        with open("despesas.txt", "r") as arquivo:
-            proxima_linha_eh_cabecalho = True
-            for linha in arquivo:
-                if proxima_linha_eh_cabecalho:
-                    proxima_linha_eh_cabecalho = False
-                    continue
-
-                campos = linha.strip().split('\t')
-                descricao = campos[0]
-                mes = int(campos[1])
-                valor = float(campos[2])
-                despesa = {'descricao': descricao, 'mes': mes, 'valor': valor}
-                despesas.append(despesa)
-
-    despesas = cadastrar_despesas(despesas, mes)
-    despesas_por_mes = calcular_despesas_por_mes(despesas)
-    for mes in despesas_por_mes:
-        despesas_do_mes = despesas_por_mes[mes]
-        if despesas_do_mes > rendimento_do_mes:
-         print(
-            f"Despesas do mês {mes} ({despesas_do_mes:.2f}) são maiores do que o rendimento ({rendimento_do_mes:.2f}).")
-
-    despesas.sort(key=lambda x: x['mes'])
-    salvar_despesas(despesas)
+def calcular_total(rendimentos):
+    total_rendimentos = sum(rendimentos)
+    print(f"Total dos rendimentos: R$ {total_rendimentos:.2f}")
+    return total_rendimentos
 
 
-
-except ValueError:
-    print(
-        "O valor informado é inválido. Certifique-se de que digitou um número para o mês e um número ou decimal para o rendimento.")
-
-except Exception as e:
-    print("Ocorreu um erro ao processar a entrada:", e)
+def salvar_despesas(despesas):
+    with open("despesas.txt", "w") as arquivo:
+        arquivo.write("Descrição\tMês\tValor\n")
+        for despesa in despesas:
+            arquivo.write(f"{despesa['descricao']}\t{despesa['mes']}\t{despesa['valor']}\n")
 
 
 def excluir_despesa():
@@ -142,7 +106,8 @@ def excluir_despesa():
         print("Ocorreu um erro ao excluir a despesa:", e)
 
 
-salvar_despesas(despesas)
+
+salvar_despesas(ler_despesas())
 excluir_despesa()
 
 
@@ -203,7 +168,6 @@ diretorio = 'despesas'
 
 
 despesas = []
-
 
 for arquivo in os.listdir(excluir_despesa()):
     if arquivo.endswith('despesas.txt'):
